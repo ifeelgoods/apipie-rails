@@ -269,7 +269,7 @@ module Apipie
 
       def process_value(value)
         @values = {}
-        if @hash_params
+        if @hash_params && value
           @hash_params.each do |k, p|
               @values[p.internal_name] = p.process_value(value[k]) if value.has_key?(k)
           end
