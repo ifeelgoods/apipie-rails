@@ -60,6 +60,11 @@ module Apipie
 
     def validate(value)
       return true if @allow_nil && value.nil?
+      if !@allow_nil && value.nil?
+        error = @validator.error
+        error = ParamError.new(error) unless error.is_a? StandardError
+        raise error
+      end
       unless @validator.valid?(value)
         error = @validator.error
         error = ParamError.new(error) unless error.is_a? StandardError
