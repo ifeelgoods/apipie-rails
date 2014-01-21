@@ -14,9 +14,8 @@
 <% @doc[:resources].sort_by(&:first).each do |key, api| %>
   <h2>
     <a href='<%= api[:doc_url] %>.html'>
-      <%= api[:name] %>
+      <%= api[:short_description] %>
     </a><br>
-    <small><%= api[:short_description] %></small>
   </h2>
   <table class='table'>
     <thead>

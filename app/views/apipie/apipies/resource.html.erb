@@ -4,16 +4,15 @@
     <span class='divider'>/</span>
   </li>
   <li class='active'>
-    <%= @resource[:name] %>
+    <%= @resource[:short_description] %>
     <% if @resource[:version] %><% end %>
   </li>
 </ul>
 
 <div class='page-header'>
   <h1>
-    <%= @resource[:name] %>
+    <%= @resource[:short_description] %>
     <br>
-    <small><%= raw @resource[:short_description] %></small>
   </h1>
 </div>
 
