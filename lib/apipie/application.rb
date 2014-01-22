@@ -27,6 +27,38 @@ module Apipie
       @controller_to_resource_id[controller] = resource_id
     end
 
+    def route(controller, method)
+
+      # ensure routes are loaded
+      Rails.application.reload_routes! unless Rails.application.routes.routes.any?
+
+      regexps = controller_versions(controller).map{|version| Regexp.new("\\A#{Apipie.configuration.api_base_url[version]}")}
+
+      @apipie_api_routes ||= Rails.application.routes.routes.select { |x| regexps.map{|regex| regex =~ x.path.spec.to_s}.compact.any? }
+
+      route_selected = @apipie_api_routes.select{|route|
+        controller == route.app.controller(route.defaults) && method.to_s == route.defaults[:action]
+      }.first
+
+      path = route_selected.path.spec.to_s.gsub(Apipie.configuration.api_base_url[Apipie.configuration.default_version], '')
+      path.gsub!('(.:format)', '')
+      path.gsub!('(', '')
+      path.gsub!(')', '')
+
+      {path: path, verb: human_verb(route_selected)}
+    end
+
+    def human_verb(route)
+      verb = API_METHODS.select{|defined_verb| defined_verb =~ route.verb}
+      if verb.count != 1
+        verb = API_METHODS.select{|defined_verb| defined_verb == route.constraints[:method]}
+        if verb.blank?
+          raise "Unknow verb #{route.path.spec.to_s}"
+        end
+      end
+      verb.first
+    end
+
     # create new method api description
     def define_method_description(controller, method_name, dsl_data)
       return if ignored?(controller, method_name)
