@@ -41,21 +41,23 @@ module Apipie
       # ensure routes are loaded
       Rails.application.reload_routes! unless Rails.application.routes.routes.any?
 
-      route_selected = apipie_routes.select{|route|
+      routes_selected = apipie_routes.select{|route|
         controller == route.app.controller(route.defaults) && method.to_s == route.defaults[:action]
-      }.first
+      }
 
-      path = route_selected.path.spec.to_s
+      routes_selected.map do |route_selected|
+        path = route_selected.path.spec.to_s
 
-      Apipie.configuration.api_base_url.values.each do |values|
-        path.gsub!(values, '')
+        Apipie.configuration.api_base_url.values.each do |values|
+          path.gsub!("#{values}/", '/')
+        end
+
+        path.gsub!('(.:format)', '')
+        path.gsub!('(', '')
+        path.gsub!(')', '')
+
+        {path: path, verb: human_verb(route_selected)}
       end
-
-      path.gsub!('(.:format)', '')
-      path.gsub!('(', '')
-      path.gsub!(')', '')
-
-      {path: path, verb: human_verb(route_selected)}
     end
 
     def human_verb(route)

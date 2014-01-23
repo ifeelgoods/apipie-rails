@@ -261,12 +261,17 @@ describe UsersController do
     context "Usign routes.rb" do
       it "should contain basic info about method" do
         a = Apipie[UsersController, :create_route]
-        a.apis.count.should == 1
+        a.apis.count.should == 2
         a.formats.should eq(['json'])
-        api = a.apis.first
-        api.short_description.should eq("Create user")
-        api.path.should eq("/users/create_route")
-        api.http_method.should eq("POST")
+        api1 = a.apis.shift
+        api1.short_description.should eq("Create user")
+        api1.path.should eq("/users/create_route")
+        api1.http_method.should eq("POST")
+
+        api2 = a.apis.shift
+        api2.short_description.should eq("Create user")
+        api2.path.should eq("/api_double/create_route")
+        api2.http_method.should eq("POST")
       end
     end
 

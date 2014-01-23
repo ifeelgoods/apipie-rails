@@ -8,6 +8,9 @@ Dummy::Application.routes.draw do
           post :create_route
         end
       end
+
+      post 'api_double/create_route' => 'users#create_route'
+
       resources :concerns, :only => [:index, :show]
       resources :twitter_example do
         collection do
