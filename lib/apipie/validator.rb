@@ -72,55 +72,6 @@ module Apipie
 
     end
 
-    class BasicTypeValidator < BaseValidator
-      FORMATS = {
-        array: {
-          is_a: [Array, NilClass],
-          # always return an array
-          processing: lambda {|value| value ? value : []}
-        },
-        integer: {
-          is_a: [String, Integer, NilClass, Fixnum],
-          processing: lambda {|value| value ? value.to_i : nil}
-        },
-        date: {
-          is_a: [String, NilClass],
-          processing: lambda {|value| value ? DateTime.parse(value) : nil}
-        },
-        enumeration: {
-          is_a: [String, NilClass],
-          processing: lambda {|value| value ? value.split(',') : []}
-        },
-        boolean: {
-          is_a: [String, TrueClass, FalseClass],
-          processing: lambda {|value| value == 'true' || value == true}
-        }
-      }
-
-      def initialize(param_description, argument)
-        super(param_description)
-        @type = argument
-      end
-
-      def validate(value)
-        FORMATS[@type][:is_a].include?(value.class)
-      end
-
-      def process_value(value)
-        FORMATS[@type][:processing].call(value)
-      end
-
-      def self.build(param_description, argument, options, block)
-        if FORMATS.keys.include?(argument)
-          self.new(param_description, argument)
-        end
-      end
-
-      def description
-        "Must be #{@type}"
-      end
-    end
-
     # validate arguments type
     class TypeValidator < BaseValidator
 
