@@ -111,13 +111,23 @@ module Apipie
     end
 
     def acl_display=(boolean)
-      if ENV['ACL_DISPLAY'].nil?
+      if ENV['APIPIE_ACL_DISPLAY'].nil?
         @acl_display = boolean
       end
     end
 
     def acl_display
       @acl_display
+    end
+
+    def acl_display_role=(role)
+      unless ENV['APIPIE_ACL_DISPLAY_ROLE']
+        @acl_display_role = role.to_s.to_sym
+      end
+    end
+
+    def acl_display_role
+      @acl_display_role
     end
 
     def initialize
@@ -139,7 +149,8 @@ module Apipie
       @namespaced_resources = false
       @doc_path = "doc"
       @process_values = false
-      @acl_display = ENV['ACL_DISPLAY']
+      @acl_display = ENV['APIPIE_ACL_DISPLAY']
+      @acl_display_role = ENV['APIPIE_ACL_DISPLAY_ROLE'] ? ENV['APIPIE_ACL_DISPLAY_ROLE'].to_sym : nil
     end
   end
 end

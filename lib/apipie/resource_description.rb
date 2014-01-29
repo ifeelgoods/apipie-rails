@@ -80,10 +80,16 @@ module Apipie
 
     def to_json(method_name = nil)
 
-      methods = if method_name.blank?
-        @_methods.collect { |key, method_description| method_description.to_json}
+      methods_filtered = if Apipie.configuration.acl_display_role
+        @_methods.select{|key, description| description.acl.include?(Apipie.configuration.acl_display_role)}
       else
-        [@_methods[method_name.to_sym].to_json]
+        @_methods
+      end
+
+      methods = if method_name.blank?
+        methods_filtered.collect { |key, method_description| method_description.to_json}
+      else
+        [methods_filtered[method_name.to_sym].to_json]
       end
 
       {
