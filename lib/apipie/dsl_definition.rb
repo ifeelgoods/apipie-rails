@@ -331,6 +331,10 @@ module Apipie
         end
 
         begin
+          ### not the best place for this
+          # acl.get_acl depends of the simple_acl gem
+          _apipie_dsl_data[:acl] = acl.get_acl(method_name)
+          ###
           # remove method description if exists and create new one
           Apipie.remove_method_description(self, _apipie_dsl_data[:api_versions], method_name)
           if _apipie_dsl_data[:from_route]
