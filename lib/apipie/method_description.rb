@@ -15,7 +15,7 @@ module Apipie
 
     end
 
-    attr_reader :full_description, :method, :resource, :apis, :examples, :see, :formats
+    attr_reader :full_description, :method, :resource, :apis, :examples, :see, :formats, :acl
 
     def initialize(method, resource, dsl_data)
       @method = method.to_s
@@ -36,6 +36,8 @@ module Apipie
       @see = dsl_data[:see].map do |args|
         Apipie::SeeDescription.new(args)
       end
+
+      @acl = dsl_data[:acl]
 
       @formats = dsl_data[:formats]
       @examples = dsl_data[:examples]
@@ -125,7 +127,7 @@ module Apipie
     end
 
     def to_json
-      {
+      hash = {
         :doc_url => doc_url,
         :name => @method,
         :apis => method_apis_to_json,
@@ -134,8 +136,14 @@ module Apipie
         :errors => errors.map(&:to_json),
         :params => params_ordered.map(&:to_json).flatten,
         :examples => @examples,
-        :see => see.map(&:to_json)
+        :see => see.map(&:to_json),
       }
+
+      if Apipie.configuration.acl_display
+        hash.merge(:acl => acl)
+      else
+        hash
+      end
     end
 
     # was the description defines in a module instead of directly in controller?

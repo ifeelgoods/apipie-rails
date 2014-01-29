@@ -110,6 +110,16 @@ module Apipie
       @api_base_url[version] = url
     end
 
+    def acl_display=(boolean)
+      if ENV['ACL_DISPLAY'].nil?
+        @acl_display = boolean
+      end
+    end
+
+    def acl_display
+      @acl_display
+    end
+
     def initialize
       @markup = Apipie::Markup::RDoc.new
       @app_name = "Another API"
@@ -129,6 +139,7 @@ module Apipie
       @namespaced_resources = false
       @doc_path = "doc"
       @process_values = false
+      @acl_display = ENV['ACL_DISPLAY']
     end
   end
 end
