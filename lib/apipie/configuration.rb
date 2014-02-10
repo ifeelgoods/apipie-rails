@@ -5,8 +5,7 @@ module Apipie
       :api_base_url, :doc_base_url, :required_by_default, :layout,
       :default_version, :debug, :version_in_url, :namespaced_resources,
       :validate, :validate_value, :validate_presence, :authenticate, :doc_path,
-      :show_all_examples
-
+      :show_all_examples, :routes_path_formatter
 
     alias_method :validate?, :validate
     alias_method :required_by_default?, :required_by_default
@@ -107,6 +106,11 @@ module Apipie
       @api_base_url[version] = url
     end
 
+    def routes_path_formatter=(formatter)
+      raise "Apipie: routes_path_formatter : #{formatter} is not a lambda" unless formatter.class == Proc && formatter.lambda?
+      @routes_path_formatter = formatter
+    end
+
     def initialize
       @markup = Apipie::Markup::RDoc.new
       @app_name = "Another API"
@@ -125,6 +129,14 @@ module Apipie
       @version_in_url = true
       @namespaced_resources = false
       @doc_path = "doc"
+      @routes_path_formatter = lambda do |path|
+        path.gsub!('(.:format)', '')
+        path.gsub!(/[()]/, '')
+        Apipie.configuration.api_base_url.values.each do |values|
+          path.gsub!("#{values}/", '/')
+        end
+        path
+      end
     end
   end
 end
