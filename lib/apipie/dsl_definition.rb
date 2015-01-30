@@ -236,7 +236,7 @@ module Apipie
               end
 
               if Apipie.configuration.process_value?
-                @api_params ||= {}
+                @api_params = {}
                 method_params.each do |_, param|
                   # params processing
                   @api_params[param.as] = param.process_value(params[:"#{param.name}"]) if params.has_key?(param.name)
