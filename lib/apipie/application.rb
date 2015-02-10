@@ -301,8 +301,16 @@ module Apipie
         load_controller_from_file f
       end
       @checksum = nil if Apipie.configuration.update_checksum
+      @documentation_loaded = true
 
       locale = old_locale
+    end
+
+    def load_documentation
+      if !@documentation_loaded || Apipie.configuration.reload_controllers?
+        Apipie.reload_documentation
+        @documentation_loaded = true
+      end
     end
 
     def compute_checksum
@@ -313,7 +321,7 @@ module Apipie
           all_docs[File.basename(f, '.json')] = JSON.parse(File.read(f))
         end
       else
-        reload_documentation if available_versions == []
+        load_documentation if available_versions == []
         all_docs = Apipie.available_versions.inject({}) do |all, version|
           all.update(version => Apipie.to_json(version))
         end
