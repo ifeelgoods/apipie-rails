@@ -56,8 +56,8 @@ features such as generating documentation from tests, recording examples etc.
 Screenshots
 -----------
 
-.. image:: https://img.skitch.com/20120428-nruk3e87xs2cu4ydsjujdh11fq.png
-.. image:: https://img.skitch.com/20120428-bni2cmq5cyhjuw1jkd78e3qjxn.png
+.. image:: https://github.com/Apipie/apipie-rails/blob/master/images/screenshot-1.png
+.. image:: https://github.com/Apipie/apipie-rails/blob/master/images/screenshot-2.png
 
 Authors
 -------
@@ -224,6 +224,9 @@ see
 meta
   Hash or array with custom metadata.
 
+show
+  Resource is hidden from documentation when set to false (true by default)
+
 Example:
 ~~~~~~~~
 
@@ -236,6 +239,7 @@ Example:
 
    # More complex example
    api :GET, "/users/:id", "Show user profile"
+   show false
    error :code => 401, :desc => "Unauthorized"
    error :code => 404, :desc => "Not Found", :meta => {:anything => "you can think of"}
    param :session, String, :desc => "user is logged in", :required => true
@@ -857,8 +861,8 @@ Adding custom validator
 Only basic validators are included but it is really easy to add your own.
 Create a new initializer with a subclass of Apipie::Validator::BaseValidator.
 Two methods are required to implement this - instance method
-<tt>validate(value)</tt> and class method
-<tt>build(param_description, argument, options, block)</tt>.
+:code:`validate(value)` and class method
+:code:`build(param_description, argument, options, block)`.
 
 When searching for the validator +build+ method, every subclass of
 Apipie::Validator::BaseValidator is called. The first one that returns the
@@ -1095,6 +1099,9 @@ When you want to avoid any unnecessary computation in production mode,
 you can generate a cache with ``rake apipie:cache`` and configure the
 app to use it in production with ``config.use_cache = Rails.env.production?``
 
+Default cache dir is ``File.join(Rails.root, "public", "apipie-cache")``, 
+you can change it to where you want, example: ``config.cache_dir = File.join(Rails.root, "doc", "apidoc")``.
+
 If, for some complex cases, you need to generate/re-generate just part of the cache
 use ``rake apipie:cache cache_part=index`` resp. ``rake apipie:cache cache_part=resources``
 To generate it for different locations for further processing use ``rake apipie:cache OUT=/tmp/apipie_cache``.
@@ -1263,8 +1270,8 @@ further versions.
 
 There is, however, an even better and more flexible way to reuse your API
 documentation for this purpose: using the API the Apipie
-provides in the generator code. Check out
-`Foreman API bindings <https://github.com/mbacovsky/foreman_api>`_, as they
+provides in the generator code. Check out our sister project
+`apipie-bindings <https://github.com/Apipie/apipie-bindings>`_, as they
 use exactly this approach. You also don't need to run the service,
 provided it uses Apipie as a backend.
 
@@ -1294,4 +1301,4 @@ configuration:
 
 * `Read-world application usage with versioning <https://github.com/theforeman/foreman>`_
 
-* `Using Apipie API to generate bindings <https://github.com/mbacovsky/foreman_api>`_
+* `Using Apipie API to generate bindings <https://github.com/Apipie/apipie-bindings>`_
