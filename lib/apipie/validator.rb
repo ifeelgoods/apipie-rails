@@ -48,7 +48,7 @@ module Apipie
       end
 
       def error
-        ParamInvalid.new(param_name, @error_value, description)
+        ParamInvalid.new(param_name, @error_value, description, param_description)
       end
 
       def to_s
@@ -263,7 +263,7 @@ module Apipie
       end
 
       def error
-        ParamInvalid.new(param_name, @error_value, @help)
+        ParamInvalid.new(param_name, @error_value, @help, param_description)
       end
 
       def description
