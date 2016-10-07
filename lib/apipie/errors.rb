@@ -8,10 +8,11 @@ module Apipie
 
   # abstract
   class DefinedParamError < ParamError
-    attr_accessor :param
+    attr_accessor :param, :param_description
 
-    def initialize(param)
+    def initialize(param, param_description)
       @param = param
+      @param_description = param_description
     end
   end
 
@@ -38,8 +39,8 @@ module Apipie
   class ParamInvalid < DefinedParamError
     attr_accessor :value, :error
 
-    def initialize(param, value, error)
-      super param
+    def initialize(param, value, error, param_description)
+      super param, param_description
       @value = value
       @error = error
     end

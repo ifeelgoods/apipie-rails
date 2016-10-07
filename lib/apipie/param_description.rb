@@ -105,6 +105,19 @@ module Apipie
       ret
     end
 
+    # Get parameter parents names
+    def parents_path
+      names ||= []
+      obj = self
+
+      while !obj.nil?
+        names << obj.name
+        obj = obj.parent
+      end
+
+      names
+    end
+
     def to_json(lang = nil)
       hash = { :name => name.to_s,
                :full_name => full_name,
