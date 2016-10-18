@@ -14,6 +14,10 @@ module Apipie
       @param = param
       @param_description = param_description
     end
+
+    def parameter_path
+      param_description.parents_and_self_names
+    end
   end
 
   class ParamMissing < DefinedParamError
@@ -27,6 +31,10 @@ module Apipie
       else
         "Missing parameter #{@param.name}"
       end
+    end
+
+    def parameter_path
+      [param.name] + param_description.parents_and_self_names
     end
   end
 
