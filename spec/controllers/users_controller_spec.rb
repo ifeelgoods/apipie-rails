@@ -143,6 +143,13 @@ describe UsersController do
             assert_response :success
           end
 
+          it "should work with {} value for a required hash param" do
+            expect {
+              get :show, :id => '5', :session => "secret_hash", :hash_param => {:dummy_hash => {}}
+            }.to raise_error(Apipie::ParamMissing, 'Missing parameter dummy_2')
+            assert_response :success
+          end
+
           it "should fail if required parameter is missing" do
             expect { get :show, :id => 5 }.to raise_error(Apipie::ParamMissing, /session_parameter_is_required/)
           end

@@ -106,7 +106,7 @@ module Apipie
     end
 
     # Get parameter parents names
-    def parents_path
+    def parents_and_self_names
       names ||= []
       obj = self
 
