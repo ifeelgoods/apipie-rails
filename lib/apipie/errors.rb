@@ -16,7 +16,7 @@ module Apipie
     end
 
     def parameter_path
-      param_description.parents_and_self_names
+      param_description.parents_path
     end
   end
 
@@ -34,7 +34,7 @@ module Apipie
     end
 
     def parameter_path
-      [param.name] + param_description.parents_and_self_names
+      [param.name] + param_description.parents_path
     end
   end
 
